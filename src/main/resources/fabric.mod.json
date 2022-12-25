@@ -15,7 +15,7 @@
   "icon": "assets/chathighlighter/icon.png",
   "environment": "*",
   "entrypoints": {
-    "main": [
+    "client": [
       "net.uku3lig.chathighlighter.ChatHighlighter"
     ]
   },
