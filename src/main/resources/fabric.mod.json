@@ -1,26 +1,26 @@
 {
   "schemaVersion": 1,
-  "id": "modtemplate",
+  "id": "chathighlighter",
   "version": "${version}",
-  "name": "Mod Template",
-  "description": "le description",
+  "name": "ChatHighlighter",
+  "description": "",
   "authors": [
-    "me"
+    "uku"
   ],
   "contact": {
     "website": "https://uku3lig.net",
-    "repo": "https://github.com/uku3lig/modtemplate"
+    "repo": "https://github.com/uku3lig/chathighlighter"
   },
-  "license": "unlicense",
-  "icon": "assets/modtemplate/icon.png",
+  "license": "mit",
+  "icon": "assets/chathighlighter/icon.png",
   "environment": "*",
   "entrypoints": {
     "main": [
-      "net.uku3lig.modtemplate.ModTemplate"
+      "net.uku3lig.chathighlighter.ChatHighlighter"
     ]
   },
   "mixins": [
-    "modtemplate.mixins.json"
+    "chathighlighter.mixins.json"
   ],
   "depends": {
     "fabricloader": ">=0.14",

@@ -31,11 +31,6 @@ dependencies {
     mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"
     modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
 
-    // Fabric API. Not needed but you might want it
-    modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_api_version}"
-    // You can import single modules like this, refer to https://github.com/FabricMC/fabric to see a list
-    // modImplementation(fabricApi.module("MODULE_NAME", project.fabric_api_version))
-
     // ukulib, very cool library
     modApi "net.uku3lig:ukulib:${project.ukulib_version}"
 
