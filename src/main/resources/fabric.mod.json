@@ -1,0 +1,29 @@
+{
+  "schemaVersion": 1,
+  "id": "modtemplate",
+  "version": "${version}",
+  "name": "Mod Template",
+  "description": "le description",
+  "authors": [
+    "me"
+  ],
+  "contact": {
+    "website": "https://uku3lig.net",
+    "repo": "https://github.com/uku3lig/modtemplate"
+  },
+  "license": "unlicense",
+  "icon": "assets/modtemplate/icon.png",
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "net.uku3lig.modtemplate.ModTemplate"
+    ]
+  },
+  "mixins": [
+    "modtemplate.mixins.json"
+  ],
+  "depends": {
+    "fabricloader": ">=0.14",
+    "minecraft": "~1.19.3"
+  }
+}
