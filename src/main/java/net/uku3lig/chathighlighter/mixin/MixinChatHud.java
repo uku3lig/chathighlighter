@@ -24,14 +24,16 @@ public abstract class MixinChatHud extends DrawableHelper {
     @Redirect(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/font/TextRenderer;drawWithShadow(Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/text/OrderedText;FFI)I"))
     public int highlight(TextRenderer instance, MatrixStack matrices, OrderedText text, float x, float y, int color) {
         final ChatHighlighterConfig config = ChatHighlighter.getManager().getConfig();
-        final String keyword = config.getText();
+        final String keyword = config.getText().toLowerCase(Locale.ROOT);
 
-        String str = Ukutils.getText(text);
-        if (str.toLowerCase(Locale.ROOT).contains(keyword)) {
-            String before = str.substring(0, str.indexOf(keyword));
+        String str = Ukutils.getText(text).toLowerCase(Locale.ROOT);
+        int index = str.indexOf(keyword);
+        while (index >= 0) {
+            String before = str.substring(0, index);
             int beforeWidth = instance.getWidth(before);
             int width = instance.getWidth(keyword);
             fill(matrices, beforeWidth-1, (int) y-1, width + beforeWidth + 1, (int) y + getLineHeight() + 1, config.getColor());
+            index = str.indexOf(keyword, index + 1);
         }
 
         return instance.drawWithShadow(matrices, text, x, y, color);
