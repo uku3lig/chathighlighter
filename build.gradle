@@ -17,6 +17,9 @@ repositories {
         name "uku's repo"
         url "https://maven.uku3lig.net/releases"
     }
+    maven {
+        url "https://maven.uku3lig.net/snapshots"
+    }
 
     // See https://docs.modrinth.com/docs/tutorials/maven/
     maven {

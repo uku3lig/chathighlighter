@@ -17,6 +17,9 @@
   "entrypoints": {
     "client": [
       "net.uku3lig.chathighlighter.ChatHighlighter"
+    ],
+    "ukulib": [
+      "net.uku3lig.chathighlighter.UkulibHook"
     ]
   },
   "mixins": [
