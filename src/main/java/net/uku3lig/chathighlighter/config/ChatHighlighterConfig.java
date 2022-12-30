@@ -15,10 +15,11 @@ import net.uku3lig.ukulib.config.IConfig;
 public class ChatHighlighterConfig implements IConfig<ChatHighlighterConfig> {
     private String text;
     private int color;
+    private boolean usePattern;
 
     @Override
     public ChatHighlighterConfig defaultConfig() {
         ClientPlayerEntity player = MinecraftClient.getInstance().player;
-        return new ChatHighlighterConfig(player != null ? player.getEntityName() : "uku3lig", 0x7FFFFF00);
+        return new ChatHighlighterConfig(player != null ? player.getEntityName() : "uku3lig", 0x7FFFFF00, false);
     }
 }

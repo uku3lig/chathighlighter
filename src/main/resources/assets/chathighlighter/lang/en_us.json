@@ -1,4 +1,5 @@
 {
   "chathighlighter.option.text": "Highlighted Text",
-  "chathighlighter.option.color": "Highlight Color"
+  "chathighlighter.option.color": "Highlight Color",
+  "chathighlighter.option.regex": "(Advanced) Use RegEx"
 }
