@@ -16,29 +16,25 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 
 import java.util.Locale;
 import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 @Mixin(ChatHud.class)
 @Slf4j
 public abstract class MixinChatHud extends DrawableHelper {
-    @Shadow protected abstract int getLineHeight();
+    @Shadow
+    protected abstract int getLineHeight();
 
     @Redirect(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/font/TextRenderer;drawWithShadow(Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/text/OrderedText;FFI)I"))
     public int highlight(TextRenderer instance, MatrixStack matrices, OrderedText text, float x, float y, int color) {
         final ChatHighlighterConfig config = ChatHighlighter.getManager().getConfig();
         final String str = Ukutils.getText(text).toLowerCase(Locale.ROOT);
 
-        if (config.isUsePattern()) {
-            try {
-                Matcher matcher = Pattern.compile(config.getText()).matcher(str);
-                while (matcher.find()) {
-                    String before = str.substring(0, matcher.start());
-                    int beforeWidth = instance.getWidth(before);
-                    int width = instance.getWidth(matcher.group());
-                    fill(matrices, beforeWidth, (int) y, width + beforeWidth, (int) y + getLineHeight(), config.getColor());
-                }
-            } catch (Exception e) {
-                // regex invalid, do nothing
+        if (config.isUsePattern() && config.getPattern().isPresent()) {
+            Matcher matcher = config.getPattern().get().matcher(str);
+            while (matcher.find()) {
+                String before = str.substring(0, matcher.start());
+                int beforeWidth = instance.getWidth(before);
+                int width = instance.getWidth(matcher.group());
+                fill(matrices, beforeWidth, (int) y, width + beforeWidth, (int) y + getLineHeight(), config.getColor());
             }
         } else {
             final String keyword = config.getText().toLowerCase(Locale.ROOT);
