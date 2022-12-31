@@ -9,9 +9,10 @@ import net.minecraft.client.gui.hud.MessageIndicator;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.network.message.MessageSignatureData;
-import net.minecraft.sound.SoundEvents;
+import net.minecraft.registry.Registries;
 import net.minecraft.text.OrderedText;
 import net.minecraft.text.Text;
+import net.minecraft.util.Identifier;
 import net.uku3lig.chathighlighter.ChatHighlighter;
 import net.uku3lig.chathighlighter.config.ChatHighlighterConfig;
 import net.uku3lig.ukulib.utils.Ukutils;
@@ -23,6 +24,7 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import java.util.Locale;
+import java.util.Optional;
 import java.util.regex.Matcher;
 
 @Mixin(ChatHud.class)
@@ -67,16 +69,19 @@ public abstract class MixinChatHud extends DrawableHelper {
 
         if (config.isUsePattern() && config.getPattern().isPresent()) {
             Matcher matcher = config.getPattern().get().matcher(str);
-            if (matcher.find()) playSound();
+            if (matcher.find()) playSound(config);
         } else if (str.contains(config.getText().toLowerCase(Locale.ROOT))) {
-            playSound();
+            playSound(config);
         }
     }
 
-    private void playSound() {
+    private void playSound(ChatHighlighterConfig config) {
         ClientPlayerEntity player = MinecraftClient.getInstance().player;
         if (player == null) return;
 
-        player.playSound(SoundEvents.BLOCK_NOTE_BLOCK_BELL.value(), 1, 0.7f);
+        Optional.ofNullable(config.getSound())
+                .map(Identifier::new)
+                .map(Registries.SOUND_EVENT::get)
+                .ifPresent(e -> player.playSound(e, 1, 1));
     }
 }

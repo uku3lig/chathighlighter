@@ -20,6 +20,7 @@ public class ChatHighlighterConfig implements IConfig<ChatHighlighterConfig> {
     private int color;
     private boolean usePattern;
     private boolean playSound;
+    private String sound;
 
     public Optional<Pattern> getPattern() {
         try {
@@ -32,6 +33,6 @@ public class ChatHighlighterConfig implements IConfig<ChatHighlighterConfig> {
     @Override
     public ChatHighlighterConfig defaultConfig() {
         ClientPlayerEntity player = MinecraftClient.getInstance().player;
-        return new ChatHighlighterConfig(player != null ? player.getEntityName() : "uku3lig", 0x7FFFFF00, false, true);
+        return new ChatHighlighterConfig(player != null ? player.getEntityName() : "uku3lig", 0x7FFFFF00, false, true, "block.note_block.bell");
     }
 }
