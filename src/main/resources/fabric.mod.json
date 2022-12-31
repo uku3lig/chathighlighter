@@ -26,7 +26,7 @@
     "chathighlighter.mixins.json"
   ],
   "depends": {
-    "fabricloader": ">=0.14",
-    "minecraft": "~1.19.3"
+    "fabricloader": ">=0.13",
+    "ukulib": ">=0.6.1"
   }
 }
