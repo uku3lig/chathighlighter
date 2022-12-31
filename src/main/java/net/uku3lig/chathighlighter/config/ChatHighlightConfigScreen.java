@@ -6,7 +6,6 @@ import net.minecraft.text.Text;
 import net.uku3lig.chathighlighter.ChatHighlighter;
 import net.uku3lig.ukulib.config.impl.StringInputScreen;
 import net.uku3lig.ukulib.config.screen.AbstractConfigScreen;
-import net.uku3lig.ukulib.config.screen.ColorSelectScreen;
 import net.uku3lig.ukulib.utils.Ukutils;
 
 import java.util.function.UnaryOperator;
@@ -25,8 +24,7 @@ public class ChatHighlightConfigScreen extends AbstractConfigScreen<ChatHighligh
 
         return new SimpleOption[]{
                 Ukutils.createOpenButton("chathighlighter.option.text", config.getText(), textScreen),
-                Ukutils.createOpenButton("chathighlighter.option.color", parent -> new ColorSelectScreen(
-                        Text.translatable("chathighlighter.option.color"), parent, config::setColor, config.getColor(), manager)),
+                Ukutils.createOpenButton("chathighlighter.option.color", parent -> new HighlightSelectScreen(parent, manager)),
                 SimpleOption.ofBoolean("chathighlighter.option.regex", config.isUsePattern(), config::setUsePattern),
                 SimpleOption.ofBoolean("chathighlighter.option.play_sound", config.isPlaySound(), config::setPlaySound),
                 Ukutils.createOpenButton("chathighlighter.option.sound", parent -> new SoundInputScreen(parent, manager))
