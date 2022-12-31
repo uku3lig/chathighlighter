@@ -25,7 +25,9 @@ public class ChatHighlightConfigScreen extends AbstractConfigScreen<ChatHighligh
         return new SimpleOption[]{
                 Ukutils.createOpenButton("chathighlighter.option.text", config.getText(), textScreen),
                 Ukutils.createOpenButton("chathighlighter.option.color", parent -> new HighlightSelectScreen(parent, manager)),
-                SimpleOption.ofBoolean("chathighlighter.option.regex", config.isUsePattern(), config::setUsePattern),
+                SimpleOption.ofBoolean("chathighlighter.option.regex",
+                        SimpleOption.constantTooltip(Text.translatable("chathighlighter.option.regex.tooltip")),
+                        config.isUsePattern(), config::setUsePattern),
                 SimpleOption.ofBoolean("chathighlighter.option.play_sound", config.isPlaySound(), config::setPlaySound),
                 Ukutils.createOpenButton("chathighlighter.option.sound", parent -> new SoundInputScreen(parent, manager))
         };
