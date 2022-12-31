@@ -4,6 +4,7 @@ import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.OrderedText;
 import net.minecraft.text.Text;
+import net.uku3lig.chathighlighter.ChatHighlighter;
 import net.uku3lig.ukulib.config.ConfigManager;
 import net.uku3lig.ukulib.config.screen.ColorSelectScreen;
 
@@ -20,7 +21,7 @@ public class HighlightSelectScreen extends ColorSelectScreen {
 
     @Override
     protected byte defaultAlpha() {
-        return 0x7F;
+        return ChatHighlighter.getManager().getConfig().getAlpha();
     }
 
     @Override

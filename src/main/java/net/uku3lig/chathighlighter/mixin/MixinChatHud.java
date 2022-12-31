@@ -38,13 +38,16 @@ public abstract class MixinChatHud extends DrawableHelper {
         final ChatHighlighterConfig config = ChatHighlighter.getManager().getConfig();
         final String str = Ukutils.getText(text).toLowerCase(Locale.ROOT);
 
+        int highlightColor = config.getColor();
+        if (highlightColor <= 0xFFFFFF) highlightColor |= config.getAlpha();
+
         if (config.isUsePattern() && config.getPattern().isPresent()) {
             Matcher matcher = config.getPattern().get().matcher(str);
             while (matcher.find()) {
                 String before = str.substring(0, matcher.start());
                 int beforeWidth = instance.getWidth(before);
                 int width = instance.getWidth(matcher.group());
-                fill(matrices, beforeWidth, (int) y, width + beforeWidth, (int) y + getLineHeight(), config.getColor());
+                fill(matrices, beforeWidth, (int) y, width + beforeWidth, (int) y + getLineHeight(), highlightColor);
             }
         } else {
             final String keyword = config.getText().toLowerCase(Locale.ROOT);
@@ -53,7 +56,7 @@ public abstract class MixinChatHud extends DrawableHelper {
                 String before = str.substring(0, index);
                 int beforeWidth = instance.getWidth(before);
                 int width = instance.getWidth(keyword);
-                fill(matrices, beforeWidth, (int) y, width + beforeWidth, (int) y + getLineHeight(), config.getColor());
+                fill(matrices, beforeWidth, (int) y, width + beforeWidth, (int) y + getLineHeight(), highlightColor);
                 index = str.indexOf(keyword, index + 1);
             }
         }

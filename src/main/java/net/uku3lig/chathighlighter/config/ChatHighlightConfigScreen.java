@@ -1,6 +1,7 @@
 package net.uku3lig.chathighlighter.config;
 
 import net.minecraft.client.gui.screen.Screen;
+import net.minecraft.client.option.GameOptions;
 import net.minecraft.client.option.SimpleOption;
 import net.minecraft.text.Text;
 import net.uku3lig.chathighlighter.ChatHighlighter;
@@ -25,6 +26,8 @@ public class ChatHighlightConfigScreen extends AbstractConfigScreen<ChatHighligh
         return new SimpleOption[]{
                 Ukutils.createOpenButton("chathighlighter.option.text", config.getText(), textScreen),
                 Ukutils.createOpenButton("chathighlighter.option.color", parent -> new HighlightSelectScreen(parent, manager)),
+                new SimpleOption<>("chathighlighter.option.alpha", SimpleOption.emptyTooltip(), GameOptions::getGenericValueText,
+                        new SimpleOption.ValidatingIntSliderCallbacks(0, 255), Byte.toUnsignedInt(config.getAlpha()), i -> config.setAlpha(i.byteValue())),
                 SimpleOption.ofBoolean("chathighlighter.option.regex",
                         SimpleOption.constantTooltip(Text.translatable("chathighlighter.option.regex.tooltip")),
                         config.isUsePattern(), config::setUsePattern),

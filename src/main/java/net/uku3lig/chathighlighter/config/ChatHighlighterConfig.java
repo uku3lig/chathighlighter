@@ -18,6 +18,7 @@ import java.util.regex.Pattern;
 public class ChatHighlighterConfig implements IConfig<ChatHighlighterConfig> {
     private String text;
     private int color;
+    private byte alpha;
     private boolean usePattern;
     private boolean playSound;
     private String sound;
@@ -33,6 +34,6 @@ public class ChatHighlighterConfig implements IConfig<ChatHighlighterConfig> {
     @Override
     public ChatHighlighterConfig defaultConfig() {
         ClientPlayerEntity player = MinecraftClient.getInstance().player;
-        return new ChatHighlighterConfig(player != null ? player.getEntityName() : "uku3lig", 0x7FFFFF00, false, true, "block.note_block.bell");
+        return new ChatHighlighterConfig(player != null ? player.getEntityName() : "uku3lig", 0xFFFF00, (byte) 0x7F, false, true, "block.note_block.bell");
     }
 }
