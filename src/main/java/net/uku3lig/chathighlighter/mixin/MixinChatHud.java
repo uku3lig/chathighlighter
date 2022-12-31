@@ -5,10 +5,8 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.DrawableHelper;
 import net.minecraft.client.gui.hud.ChatHud;
-import net.minecraft.client.gui.hud.MessageIndicator;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.network.message.MessageSignatureData;
 import net.minecraft.text.OrderedText;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
@@ -17,7 +15,6 @@ import net.uku3lig.chathighlighter.ChatHighlighter;
 import net.uku3lig.chathighlighter.config.ChatHighlighterConfig;
 import net.uku3lig.ukulib.utils.Ukutils;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
@@ -30,8 +27,9 @@ import java.util.regex.Matcher;
 @Mixin(ChatHud.class)
 @Slf4j
 public abstract class MixinChatHud extends DrawableHelper {
-    @Shadow
-    protected abstract int getLineHeight();
+    protected double getLineHeight() {
+        return 9 * (MinecraftClient.getInstance().options.chatLineSpacing + 1);
+    }
 
     @Redirect(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/font/TextRenderer;drawWithShadow(Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/text/OrderedText;FFI)I"))
     public int highlight(TextRenderer instance, MatrixStack matrices, OrderedText text, float x, float y, int color) {
@@ -47,7 +45,7 @@ public abstract class MixinChatHud extends DrawableHelper {
                 String before = str.substring(0, matcher.start());
                 int beforeWidth = instance.getWidth(before);
                 int width = instance.getWidth(matcher.group());
-                fill(matrices, beforeWidth, (int) y, width + beforeWidth, (int) y + getLineHeight(), highlightColor);
+                fill(matrices, beforeWidth, (int) y, width + beforeWidth, (int) (y + getLineHeight()), highlightColor);
             }
         } else {
             final String keyword = config.getText().toLowerCase(Locale.ROOT);
@@ -56,7 +54,7 @@ public abstract class MixinChatHud extends DrawableHelper {
                 String before = str.substring(0, index);
                 int beforeWidth = instance.getWidth(before);
                 int width = instance.getWidth(keyword);
-                fill(matrices, beforeWidth, (int) y, width + beforeWidth, (int) y + getLineHeight(), highlightColor);
+                fill(matrices, beforeWidth, (int) y, width + beforeWidth, (int) (y + getLineHeight()), highlightColor);
                 index = str.indexOf(keyword, index + 1);
             }
         }
@@ -64,9 +62,8 @@ public abstract class MixinChatHud extends DrawableHelper {
         return instance.drawWithShadow(matrices, text, x, y, color);
     }
 
-    @Inject(method = "addMessage(Lnet/minecraft/text/Text;Lnet/minecraft/network/message/MessageSignatureData;ILnet/minecraft/client/gui/hud/MessageIndicator;Z)V",
-            at = @At("HEAD"))
-    public void playSound(Text message, MessageSignatureData signature, int ticks, MessageIndicator indicator, boolean refresh, CallbackInfo ci) {
+    @Inject(method = "addMessage(Lnet/minecraft/text/Text;IIZ)V", at = @At("HEAD"))
+    public void playSound(Text message, int messageId, int timestamp, boolean refresh, CallbackInfo ci) {
         final ChatHighlighterConfig config = ChatHighlighter.getManager().getConfig();
         final String str = message.getString().toLowerCase(Locale.ROOT);
 

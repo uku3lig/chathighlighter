@@ -38,7 +38,7 @@ dependencies {
     modApi "net.uku3lig:ukulib:${project.ukulib_version}"
 
     // Modrinth mods can be added as dependencies via their repository
-    modRuntimeOnly "maven.modrinth:lazydfu:0.1.3"
+    modRuntimeOnly "maven.modrinth:lazydfu:0.1.2"
 }
 
 processResources {
