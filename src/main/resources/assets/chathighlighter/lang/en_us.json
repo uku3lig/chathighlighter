@@ -1,5 +1,7 @@
 {
   "chathighlighter.option.text": "Highlighted Text",
-  "chathighlighter.option.color": "Highlight Color",
-  "chathighlighter.option.regex": "(Advanced) Use RegEx"
+  "chathighlighter.option.color": "Change Highlight Color",
+  "chathighlighter.option.regex": "(Advanced) Use RegEx",
+  "chathighlighter.option.play_sound": "Play Notification Sound",
+  "chathighlighter.option.sound": "Change Notification Sound"
 }
