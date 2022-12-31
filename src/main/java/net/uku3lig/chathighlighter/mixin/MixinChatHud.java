@@ -9,10 +9,10 @@ import net.minecraft.client.gui.hud.MessageIndicator;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.network.message.MessageSignatureData;
-import net.minecraft.registry.Registries;
 import net.minecraft.text.OrderedText;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.registry.Registry;
 import net.uku3lig.chathighlighter.ChatHighlighter;
 import net.uku3lig.chathighlighter.config.ChatHighlighterConfig;
 import net.uku3lig.ukulib.utils.Ukutils;
@@ -86,7 +86,7 @@ public abstract class MixinChatHud extends DrawableHelper {
 
         Optional.ofNullable(config.getSound())
                 .map(Identifier::new)
-                .map(Registries.SOUND_EVENT::get)
+                .map(Registry.SOUND_EVENT::get)
                 .ifPresent(e -> player.playSound(e, 1, 1));
     }
 }

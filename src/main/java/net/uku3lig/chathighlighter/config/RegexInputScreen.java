@@ -19,12 +19,10 @@ public class RegexInputScreen extends TextInputScreen<String> {
     @Override
     protected void init() {
         super.init();
-        addDrawableChild(ButtonWidget.builder(Text.of("Open regexr"), b -> Util.getOperatingSystem().open("https://regexr.com"))
-                .dimensions(this.width / 2 - 100, this.height - 51, 98, 20)
-                .build());
-        addDrawableChild(ButtonWidget.builder(Text.of("Open regex101"), b -> Util.getOperatingSystem().open("https://regex101.com"))
-                .dimensions(this.width / 2 + 2, this.height - 51, 98, 20)
-                .build());
+        addDrawableChild(new ButtonWidget(this.width / 2 - 100, this.height - 51, 98, 20, Text.of("Open regexr"),
+                        b -> Util.getOperatingSystem().open("https://regexr.com")));
+        addDrawableChild(new ButtonWidget(this.width / 2 + 2, this.height - 51, 98, 20, Text.of("Open regex101"),
+                b -> Util.getOperatingSystem().open("https://regex101.com")));
     }
 
     @Override
