@@ -20,8 +20,9 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.Redirect;
+import org.spongepowered.asm.mixin.injection.ModifyArgs;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import org.spongepowered.asm.mixin.injection.invoke.arg.Args;
 
 import java.util.Locale;
 import java.util.Optional;
@@ -33,8 +34,13 @@ public abstract class MixinChatHud extends DrawableHelper {
     @Shadow
     protected abstract int getLineHeight();
 
-    @Redirect(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/font/TextRenderer;drawWithShadow(Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/text/OrderedText;FFI)I"))
-    public int highlight(TextRenderer instance, MatrixStack matrices, OrderedText text, float x, float y, int color) {
+    @ModifyArgs(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/font/TextRenderer;drawWithShadow(Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/text/OrderedText;FFI)I"))
+    public void highlight(Args args) {
+        TextRenderer instance = MinecraftClient.getInstance().textRenderer;
+        MatrixStack matrices = args.get(0);
+        OrderedText text = args.get(1);
+        float y = args.get(3);
+
         final ChatHighlighterConfig config = ChatHighlighter.getManager().getConfig();
         final String str = Ukutils.getText(text).toLowerCase(Locale.ROOT);
 
@@ -60,8 +66,6 @@ public abstract class MixinChatHud extends DrawableHelper {
                 index = str.indexOf(keyword, index + 1);
             }
         }
-
-        return instance.drawWithShadow(matrices, text, x, y, color);
     }
 
     @Inject(method = "addMessage(Lnet/minecraft/text/Text;Lnet/minecraft/network/message/MessageSignatureData;ILnet/minecraft/client/gui/hud/MessageIndicator;Z)V",
