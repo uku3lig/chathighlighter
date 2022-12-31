@@ -67,6 +67,8 @@ public abstract class MixinChatHud extends DrawableHelper {
         final ChatHighlighterConfig config = ChatHighlighter.getManager().getConfig();
         final String str = message.getString().toLowerCase(Locale.ROOT);
 
+        if (!config.isPlaySound()) return;
+
         if (config.isUsePattern() && config.getPattern().isPresent()) {
             Matcher matcher = config.getPattern().get().matcher(str);
             if (matcher.find()) playSound(config);
