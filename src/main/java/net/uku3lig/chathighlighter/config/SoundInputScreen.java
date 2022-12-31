@@ -9,6 +9,7 @@ import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import net.uku3lig.ukulib.config.ConfigManager;
 import net.uku3lig.ukulib.config.screen.TextInputScreen;
+import net.uku3lig.ukulib.utils.SilentButtonWidget;
 
 import java.util.Optional;
 
@@ -23,7 +24,7 @@ public class SoundInputScreen extends TextInputScreen<String> {
     @Override
     protected void init() {
         super.init();
-        playButton = addDrawableChild(ButtonWidget.builder(Text.of("Play Sound"),
+        playButton = addDrawableChild(SilentButtonWidget.silentBuilder(Text.of("Play Sound"),
                         b -> convert(getTextField().getText())
                                 .map(Identifier::new)
                                 .map(Registries.SOUND_EVENT::get)
