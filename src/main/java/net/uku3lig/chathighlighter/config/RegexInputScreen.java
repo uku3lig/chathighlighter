@@ -1,7 +1,9 @@
 package net.uku3lig.chathighlighter.config;
 
 import net.minecraft.client.gui.screen.Screen;
+import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.text.Text;
+import net.minecraft.util.Util;
 import net.uku3lig.ukulib.config.ConfigManager;
 import net.uku3lig.ukulib.config.screen.TextInputScreen;
 
@@ -12,6 +14,17 @@ public class RegexInputScreen extends TextInputScreen<String> {
     protected RegexInputScreen(Screen parent, ConfigManager<ChatHighlighterConfig> manager) {
         super(parent, Text.of("Pattern Input Screen"), Text.of("Pattern"),
                 p -> manager.getConfig().setText(p), manager.getConfig().getText(), manager);
+    }
+
+    @Override
+    protected void init() {
+        super.init();
+        addDrawableChild(ButtonWidget.builder(Text.of("Open regexr"), b -> Util.getOperatingSystem().open("https://regexr.com"))
+                .dimensions(this.width / 2 - 100, this.height - 51, 98, 20)
+                .build());
+        addDrawableChild(ButtonWidget.builder(Text.of("Open regex101"), b -> Util.getOperatingSystem().open("https://regex101.com"))
+                .dimensions(this.width / 2 + 2, this.height - 51, 98, 20)
+                .build());
     }
 
     @Override
