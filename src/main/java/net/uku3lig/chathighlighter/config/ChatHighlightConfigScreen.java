@@ -16,7 +16,7 @@ public class ChatHighlightConfigScreen extends AbstractConfigScreen<ChatHighligh
     @Override
     protected SimpleOption<?>[] getOptions(ChatHighlighterConfig config) {
         return new SimpleOption[]{
-                Ukutils.createOpenButton("chathighlighter.option.text", config.getText(), parent -> new PatternInputScreen(parent, manager)),
+                Ukutils.createOpenButton("chathighlighter.option.text", parent -> new PatternInputScreen(parent, manager)),
                 Ukutils.createOpenButton("chathighlighter.option.color", parent -> new HighlightSelectScreen(parent, manager)),
                 new SimpleOption<>("chathighlighter.option.alpha", SimpleOption.emptyTooltip(), GameOptions::getGenericValueText,
                         new SimpleOption.ValidatingIntSliderCallbacks(0, 255), Byte.toUnsignedInt(config.getAlpha()), i -> config.setAlpha(i.byteValue())),
