@@ -4,6 +4,7 @@ import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.text.Text;
 import net.minecraft.util.Util;
+import net.uku3lig.chathighlighter.ChatHighlighter;
 import net.uku3lig.ukulib.config.ConfigManager;
 import net.uku3lig.ukulib.config.screen.TextInputScreen;
 
@@ -19,6 +20,8 @@ public class RegexInputScreen extends TextInputScreen<String> {
     @Override
     protected void init() {
         super.init();
+        this.getTextField().setMaxLength(1024);
+        this.getTextField().setText(ChatHighlighter.getManager().getConfig().getText());
         addDrawableChild(ButtonWidget.builder(Text.of("Open regexr"), b -> Util.getOperatingSystem().open("https://regexr.com"))
                 .dimensions(this.width / 2 - 100, this.height - 51, 98, 20)
                 .build());
