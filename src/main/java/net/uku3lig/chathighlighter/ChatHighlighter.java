@@ -4,6 +4,7 @@ import lombok.Getter;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
+import net.fabricmc.loader.api.FabricLoader;
 import net.uku3lig.chathighlighter.config.ChatHighlighterConfig;
 import net.uku3lig.ukulib.config.ConfigManager;
 
@@ -15,5 +16,9 @@ public class ChatHighlighter implements ClientModInitializer {
     @Override
     public void onInitializeClient() {
         // :true:
+    }
+
+    public static int getOffset() {
+        return FabricLoader.getInstance().isModLoaded("chat_heads") ? 10 : 0;
     }
 }

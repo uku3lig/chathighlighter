@@ -51,7 +51,7 @@ public abstract class MixinChatHud extends DrawableHelper {
             Matcher matcher = config.getPattern().get().matcher(str);
             while (matcher.find()) {
                 String before = str.substring(0, matcher.start());
-                int beforeWidth = instance.getWidth(before);
+                int beforeWidth = instance.getWidth(before) + ChatHighlighter.getOffset();
                 int width = instance.getWidth(matcher.group());
                 fill(matrices, beforeWidth, (int) y, width + beforeWidth, (int) y + getLineHeight(), highlightColor);
             }
@@ -60,7 +60,7 @@ public abstract class MixinChatHud extends DrawableHelper {
             int index = str.indexOf(keyword);
             while (index >= 0) {
                 String before = str.substring(0, index);
-                int beforeWidth = instance.getWidth(before);
+                int beforeWidth = instance.getWidth(before) + ChatHighlighter.getOffset();
                 int width = instance.getWidth(keyword);
                 fill(matrices, beforeWidth, (int) y, width + beforeWidth, (int) y + getLineHeight(), highlightColor);
                 index = str.indexOf(keyword, index + 1);
