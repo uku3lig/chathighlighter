@@ -24,6 +24,8 @@ public class ChatHighlighterConfig implements IConfig<ChatHighlighterConfig> {
     private String sound;
 
     public Optional<Pattern> getPattern() {
+        if (text.isEmpty() || text.isBlank()) return Optional.empty();
+
         try {
             return Optional.of(Pattern.compile(text));
         } catch (Exception e) {

@@ -55,7 +55,7 @@ public abstract class MixinChatHud extends DrawableHelper {
                 int width = instance.getWidth(matcher.group());
                 fill(matrices, beforeWidth, (int) y, width + beforeWidth, (int) y + getLineHeight(), highlightColor);
             }
-        } else {
+        } else if (!config.getText().isEmpty() && !config.getText().isBlank()) {
             final String keyword = config.getText().toLowerCase(Locale.ROOT);
             int index = str.indexOf(keyword);
             while (index >= 0) {
