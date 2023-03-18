@@ -5,11 +5,8 @@ import net.minecraft.client.option.GameOptions;
 import net.minecraft.client.option.SimpleOption;
 import net.minecraft.text.Text;
 import net.uku3lig.chathighlighter.ChatHighlighter;
-import net.uku3lig.ukulib.config.impl.StringInputScreen;
 import net.uku3lig.ukulib.config.screen.AbstractConfigScreen;
 import net.uku3lig.ukulib.utils.Ukutils;
-
-import java.util.function.UnaryOperator;
 
 public class ChatHighlightConfigScreen extends AbstractConfigScreen<ChatHighlighterConfig> {
     public ChatHighlightConfigScreen(Screen parent) {
@@ -18,13 +15,8 @@ public class ChatHighlightConfigScreen extends AbstractConfigScreen<ChatHighligh
 
     @Override
     protected SimpleOption<?>[] getOptions(ChatHighlighterConfig config) {
-        final Text textOption = Text.translatable("chathighlighter.option.text");
-        final UnaryOperator<Screen> textScreen = parent -> config.isUsePattern() ?
-                new RegexInputScreen(parent, manager) :
-                new StringInputScreen(parent, textOption, textOption, config::setText, config.getText(), manager);
-
         return new SimpleOption[]{
-                Ukutils.createOpenButton("chathighlighter.option.text", config.getText(), textScreen),
+                Ukutils.createOpenButton("chathighlighter.option.text", config.getText(), parent -> new PatternInputScreen(parent, manager)),
                 Ukutils.createOpenButton("chathighlighter.option.color", parent -> new HighlightSelectScreen(parent, manager)),
                 new SimpleOption<>("chathighlighter.option.alpha", SimpleOption.emptyTooltip(), GameOptions::getGenericValueText,
                         new SimpleOption.ValidatingIntSliderCallbacks(0, 255), Byte.toUnsignedInt(config.getAlpha()), i -> config.setAlpha(i.byteValue())),

@@ -11,10 +11,13 @@ import net.uku3lig.ukulib.config.screen.TextInputScreen;
 import java.util.Optional;
 import java.util.regex.Pattern;
 
-public class RegexInputScreen extends TextInputScreen<String> {
-    protected RegexInputScreen(Screen parent, ConfigManager<ChatHighlighterConfig> manager) {
+public class PatternInputScreen extends TextInputScreen<String> {
+    private final boolean isRegex;
+
+    protected PatternInputScreen(Screen parent, ConfigManager<ChatHighlighterConfig> manager) {
         super(parent, Text.of("Pattern Input Screen"), Text.of("Pattern"),
                 p -> manager.getConfig().setText(p), manager.getConfig().getText(), manager);
+        this.isRegex = manager.getConfig().isUsePattern();
     }
 
     @Override
@@ -22,16 +25,22 @@ public class RegexInputScreen extends TextInputScreen<String> {
         super.init();
         this.getTextField().setMaxLength(1024);
         this.getTextField().setText(ChatHighlighter.getManager().getConfig().getText());
-        addDrawableChild(ButtonWidget.builder(Text.of("Open regexr"), b -> Util.getOperatingSystem().open("https://regexr.com"))
-                .dimensions(this.width / 2 - 100, this.height - 51, 98, 20)
-                .build());
-        addDrawableChild(ButtonWidget.builder(Text.of("Open regex101"), b -> Util.getOperatingSystem().open("https://regex101.com"))
-                .dimensions(this.width / 2 + 2, this.height - 51, 98, 20)
-                .build());
+
+        if (isRegex) {
+            addDrawableChild(ButtonWidget.builder(Text.of("Open regexr"), b -> Util.getOperatingSystem().open("https://regexr.com"))
+                    .dimensions(this.width / 2 - 100, this.height - 51, 98, 20)
+                    .build());
+            addDrawableChild(ButtonWidget.builder(Text.of("Open regex101"), b -> Util.getOperatingSystem().open("https://regex101.com"))
+                    .dimensions(this.width / 2 + 2, this.height - 51, 98, 20)
+                    .build());
+        }
     }
 
     @Override
     protected Optional<String> convert(String value) {
+        if (value.isEmpty() || value.isBlank()) return Optional.empty();
+        if (!isRegex) return Optional.of(value);
+
         try {
             return Optional.of(Pattern.compile(value).toString());
         } catch (Exception e) {
