@@ -55,15 +55,17 @@ public abstract class MixinChatHud extends DrawableHelper {
                 int width = instance.getWidth(matcher.group());
                 fill(matrices, beforeWidth, (int) y, width + beforeWidth, (int) y + getLineHeight(), highlightColor);
             }
-        } else if (!config.getText().isEmpty() && !config.getText().isBlank()) {
-            final String keyword = config.getText().toLowerCase(Locale.ROOT);
-            int index = str.indexOf(keyword);
-            while (index >= 0) {
-                String before = str.substring(0, index);
-                int beforeWidth = instance.getWidth(before) + ChatHighlighter.getOffset();
-                int width = instance.getWidth(keyword);
-                fill(matrices, beforeWidth, (int) y, width + beforeWidth, (int) y + getLineHeight(), highlightColor);
-                index = str.indexOf(keyword, index + 1);
+        } else {
+            for (String keyword : config.getText()) {
+                keyword = keyword.toLowerCase(Locale.ROOT);
+                int index = str.indexOf(keyword);
+                while (index >= 0) {
+                    String before = str.substring(0, index);
+                    int beforeWidth = instance.getWidth(before) + ChatHighlighter.getOffset();
+                    int width = instance.getWidth(keyword);
+                    fill(matrices, beforeWidth, (int) y, width + beforeWidth, (int) y + getLineHeight(), highlightColor);
+                    index = str.indexOf(keyword, index + 1);
+                }
             }
         }
     }
@@ -79,7 +81,7 @@ public abstract class MixinChatHud extends DrawableHelper {
         if (config.isUsePattern() && config.getPattern().isPresent()) {
             Matcher matcher = config.getPattern().get().matcher(str);
             if (matcher.find()) playSound(config);
-        } else if (str.contains(config.getText().toLowerCase(Locale.ROOT))) {
+        } else if (config.getText().stream().map(String::toLowerCase).anyMatch(str::contains)) {
             playSound(config);
         }
     }

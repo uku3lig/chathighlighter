@@ -16,7 +16,7 @@ public class PatternInputScreen extends TextInputScreen<String> {
 
     protected PatternInputScreen(Screen parent, ConfigManager<ChatHighlighterConfig> manager) {
         super(parent, Text.of("Pattern Input Screen"), Text.of("Pattern"),
-                p -> manager.getConfig().setText(p), manager.getConfig().getText(), manager);
+                p -> manager.getConfig().setJoinedText(p), manager.getConfig().getJoinedText(), manager);
         this.isRegex = manager.getConfig().isUsePattern();
     }
 
@@ -24,7 +24,7 @@ public class PatternInputScreen extends TextInputScreen<String> {
     protected void init() {
         super.init();
         this.getTextField().setMaxLength(1024);
-        this.getTextField().setText(ChatHighlighter.getManager().getConfig().getText());
+        this.getTextField().setText(ChatHighlighter.getManager().getConfig().getJoinedText());
 
         if (isRegex) {
             addDrawableChild(ButtonWidget.builder(Text.of("Open regexr"), b -> Util.getOperatingSystem().open("https://regexr.com"))
