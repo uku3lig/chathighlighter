@@ -1,7 +1,6 @@
 package net.uku3lig.chathighlighter;
 
 import lombok.Getter;
-import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.loader.api.FabricLoader;
