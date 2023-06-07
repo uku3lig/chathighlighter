@@ -1,7 +1,7 @@
 package net.uku3lig.chathighlighter.config;
 
+import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.OrderedText;
 import net.minecraft.text.Text;
 import net.uku3lig.chathighlighter.ChatHighlighter;
@@ -25,7 +25,7 @@ public class HighlightSelectScreen extends ColorSelectScreen {
     }
 
     @Override
-    protected void renderColor(MatrixStack matrices, int mouseX, int mouseY, float delta, int color) {
+    protected void renderColor(DrawContext context, int mouseX, int mouseY, float delta, int color) {
         OrderedText text = Text.of("Look at this super cool highlighted text!").asOrderedText();
         int centerX = this.width / 2;
         int x1 = centerX - textRenderer.getWidth(text) / 2 + textRenderer.getWidth("Look at this super cool ");
@@ -33,7 +33,7 @@ public class HighlightSelectScreen extends ColorSelectScreen {
         int y1 = 146;
         int y2 = y1 + textRenderer.fontHeight;
 
-        fill(matrices, x1, y1, x2, y2, color);
-        drawCenteredTextWithShadow(matrices, textRenderer, text, centerX, y1, 0xFFFFFF);
+        context.fill(x1, y1, x2, y2, color);
+        context.drawCenteredTextWithShadow(textRenderer, text, centerX, y1, 0xFFFFFF);
     }
 }

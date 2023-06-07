@@ -3,7 +3,7 @@
   "id": "chathighlighter",
   "version": "${version}",
   "name": "ChatHighlighter",
-  "description": "",
+  "description": "highlight things in chat",
   "authors": [
     "uku"
   ],
@@ -15,9 +15,6 @@
   "icon": "assets/chathighlighter/icon.png",
   "environment": "*",
   "entrypoints": {
-    "client": [
-      "net.uku3lig.chathighlighter.ChatHighlighter"
-    ],
     "ukulib": [
       "net.uku3lig.chathighlighter.UkulibHook"
     ]

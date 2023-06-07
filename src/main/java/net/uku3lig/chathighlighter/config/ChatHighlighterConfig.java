@@ -16,7 +16,7 @@ import java.util.regex.Pattern;
 @Getter
 @Setter
 public class ChatHighlighterConfig implements IConfig<ChatHighlighterConfig> {
-    private List<String> text;
+    private List<String> text = new ArrayList<>();
     private int color = 0xFFFF00;
     private byte alpha = (byte) 0x7F;
     private boolean usePattern = false;

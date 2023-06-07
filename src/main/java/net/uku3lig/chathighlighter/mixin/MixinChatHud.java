@@ -3,11 +3,10 @@ package net.uku3lig.chathighlighter.mixin;
 import lombok.extern.slf4j.Slf4j;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
-import net.minecraft.client.gui.DrawableHelper;
+import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.hud.ChatHud;
 import net.minecraft.client.gui.hud.MessageIndicator;
 import net.minecraft.client.network.ClientPlayerEntity;
-import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.network.message.MessageSignatureData;
 import net.minecraft.registry.Registries;
 import net.minecraft.text.OrderedText;
@@ -30,14 +29,14 @@ import java.util.regex.Matcher;
 
 @Mixin(ChatHud.class)
 @Slf4j
-public abstract class MixinChatHud extends DrawableHelper {
+public abstract class MixinChatHud {
     @Shadow
     protected abstract int getLineHeight();
 
-    @ModifyArgs(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/font/TextRenderer;drawWithShadow(Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/text/OrderedText;FFI)I"))
+    @ModifyArgs(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/DrawContext;drawTextWithShadow(Lnet/minecraft/client/font/TextRenderer;Lnet/minecraft/text/OrderedText;III)I"))
     public void highlight(Args args) {
         TextRenderer instance = MinecraftClient.getInstance().textRenderer;
-        MatrixStack matrices = args.get(0);
+        DrawContext context = args.get(0);
         OrderedText text = args.get(1);
         float y = args.get(3);
 
@@ -53,7 +52,7 @@ public abstract class MixinChatHud extends DrawableHelper {
                 String before = str.substring(0, matcher.start());
                 int beforeWidth = instance.getWidth(before) + ChatHighlighter.getOffset();
                 int width = instance.getWidth(matcher.group());
-                fill(matrices, beforeWidth, (int) y, width + beforeWidth, (int) y + getLineHeight(), highlightColor);
+                context.fill(beforeWidth, (int) y, width + beforeWidth, (int) y + getLineHeight(), highlightColor);
             }
         } else {
             for (String keyword : config.getText()) {
@@ -63,7 +62,7 @@ public abstract class MixinChatHud extends DrawableHelper {
                     String before = str.substring(0, index);
                     int beforeWidth = instance.getWidth(before) + ChatHighlighter.getOffset();
                     int width = instance.getWidth(keyword);
-                    fill(matrices, beforeWidth, (int) y, width + beforeWidth, (int) y + getLineHeight(), highlightColor);
+                    context.fill(beforeWidth, (int) y, width + beforeWidth, (int) y + getLineHeight(), highlightColor);
                     index = str.indexOf(keyword, index + 1);
                 }
             }
