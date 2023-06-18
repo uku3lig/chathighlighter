@@ -19,9 +19,8 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.ModifyArgs;
+import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import org.spongepowered.asm.mixin.injection.invoke.arg.Args;
 
 import java.util.Locale;
 import java.util.Optional;
@@ -33,13 +32,8 @@ public abstract class MixinChatHud {
     @Shadow
     protected abstract int getLineHeight();
 
-    @ModifyArgs(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/DrawContext;drawTextWithShadow(Lnet/minecraft/client/font/TextRenderer;Lnet/minecraft/text/OrderedText;III)I"))
-    public void highlight(Args args) {
-        TextRenderer instance = MinecraftClient.getInstance().textRenderer;
-        DrawContext context = args.get(0);
-        OrderedText text = args.get(1);
-        float y = args.get(3);
-
+    @Redirect(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/DrawContext;drawTextWithShadow(Lnet/minecraft/client/font/TextRenderer;Lnet/minecraft/text/OrderedText;III)I"))
+    public int highlight(DrawContext instance, TextRenderer textRenderer, OrderedText text, int x, int y, int color) {
         final ChatHighlighterConfig config = ChatHighlighter.getManager().getConfig();
         final String str = Ukutils.getText(text).toLowerCase(Locale.ROOT);
 
@@ -50,9 +44,9 @@ public abstract class MixinChatHud {
             Matcher matcher = config.getPattern().get().matcher(str);
             while (matcher.find()) {
                 String before = str.substring(0, matcher.start());
-                int beforeWidth = instance.getWidth(before) + ChatHighlighter.getOffset();
-                int width = instance.getWidth(matcher.group());
-                context.fill(beforeWidth, (int) y, width + beforeWidth, (int) y + getLineHeight(), highlightColor);
+                int beforeWidth = textRenderer.getWidth(before) + ChatHighlighter.getOffset();
+                int width = textRenderer.getWidth(matcher.group());
+                instance.fill(beforeWidth, y, width + beforeWidth, y + getLineHeight(), highlightColor);
             }
         } else {
             for (String keyword : config.getText()) {
@@ -60,13 +54,15 @@ public abstract class MixinChatHud {
                 int index = str.indexOf(keyword);
                 while (index >= 0) {
                     String before = str.substring(0, index);
-                    int beforeWidth = instance.getWidth(before) + ChatHighlighter.getOffset();
-                    int width = instance.getWidth(keyword);
-                    context.fill(beforeWidth, (int) y, width + beforeWidth, (int) y + getLineHeight(), highlightColor);
+                    int beforeWidth = textRenderer.getWidth(before) + ChatHighlighter.getOffset();
+                    int width = textRenderer.getWidth(keyword);
+                    instance.fill(beforeWidth, y, width + beforeWidth, y + getLineHeight(), highlightColor);
                     index = str.indexOf(keyword, index + 1);
                 }
             }
         }
+
+        return instance.drawTextWithShadow(textRenderer, text, x, y, color);
     }
 
     @Inject(method = "addMessage(Lnet/minecraft/text/Text;Lnet/minecraft/network/message/MessageSignatureData;ILnet/minecraft/client/gui/hud/MessageIndicator;Z)V",
