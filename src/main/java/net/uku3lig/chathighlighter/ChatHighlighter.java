@@ -10,7 +10,7 @@ import net.uku3lig.ukulib.config.ConfigManager;
 @Environment(EnvType.CLIENT)
 public class ChatHighlighter {
     @Getter
-    private static final ConfigManager<ChatHighlighterConfig> manager = ConfigManager.create(ChatHighlighterConfig.class, "chathighlighter");
+    private static final ConfigManager<ChatHighlighterConfig> manager = ConfigManager.createDefault(ChatHighlighterConfig.class, "chathighlighter");
 
     public static int getOffset() {
         return FabricLoader.getInstance().isModLoaded("chat_heads") ? 10 : 0;

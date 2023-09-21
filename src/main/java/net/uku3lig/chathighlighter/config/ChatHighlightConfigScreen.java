@@ -1,30 +1,47 @@
 package net.uku3lig.chathighlighter.config;
 
 import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.option.GameOptions;
 import net.minecraft.client.option.SimpleOption;
+import net.minecraft.registry.Registries;
 import net.minecraft.text.Text;
+import net.minecraft.util.Identifier;
 import net.uku3lig.chathighlighter.ChatHighlighter;
+import net.uku3lig.ukulib.config.option.ColorOption;
+import net.uku3lig.ukulib.config.option.CyclingOption;
+import net.uku3lig.ukulib.config.option.InputOption;
+import net.uku3lig.ukulib.config.option.WidgetCreator;
 import net.uku3lig.ukulib.config.screen.AbstractConfigScreen;
-import net.uku3lig.ukulib.utils.Ukutils;
+
+import java.util.Collections;
+import java.util.regex.Pattern;
 
 public class ChatHighlightConfigScreen extends AbstractConfigScreen<ChatHighlighterConfig> {
     public ChatHighlightConfigScreen(Screen parent) {
-        super(parent, Text.of("ChatHighlighter Config"), ChatHighlighter.getManager());
+        super("ChatHighlighter Config", parent, ChatHighlighter.getManager());
     }
 
     @Override
-    protected SimpleOption<?>[] getOptions(ChatHighlighterConfig config) {
-        return new SimpleOption[]{
-                Ukutils.createOpenButton("chathighlighter.option.text", parent -> new PatternInputScreen(parent, manager)),
-                Ukutils.createOpenButton("chathighlighter.option.color", parent -> new HighlightSelectScreen(parent, manager)),
-                new SimpleOption<>("chathighlighter.option.alpha", SimpleOption.emptyTooltip(), GameOptions::getGenericValueText,
-                        new SimpleOption.ValidatingIntSliderCallbacks(0, 255), Byte.toUnsignedInt(config.getAlpha()), i -> config.setAlpha(i.byteValue())),
-                SimpleOption.ofBoolean("chathighlighter.option.regex",
-                        SimpleOption.constantTooltip(Text.translatable("chathighlighter.option.regex.tooltip")),
-                        config.isUsePattern(), config::setUsePattern),
-                SimpleOption.ofBoolean("chathighlighter.option.play_sound", config.isPlaySound(), config::setPlaySound),
-                Ukutils.createOpenButton("chathighlighter.option.sound", parent -> new SoundInputScreen(parent, manager))
+    protected WidgetCreator[] getWidgets(ChatHighlighterConfig config) {
+        return new WidgetCreator[]{
+                new InputOption("chathighlighter.option.text", config.getJoinedText(), s -> {
+                    if (config.isUsePattern()) config.setText(Collections.singletonList(s));
+                    else config.setJoinedText(s);
+                }, s -> !s.isBlank() && (!config.isUsePattern() || isValidPattern(s))),
+                new ColorOption("chathighlighter.option.color", config.getColor(), config::setColor, true),
+                CyclingOption.ofBoolean("chathighlighter.option.regex", config.isUsePattern(), config::setUsePattern,
+                        SimpleOption.constantTooltip(Text.translatable("chathighlighter.option.regex.tooltip"))),
+                CyclingOption.ofBoolean("chathighlighter.option.play_sound", config.isPlaySound(), config::setPlaySound),
+                new InputOption("chathighlighter.option.sound", config.getSound(), config::setSound,
+                        s -> Registries.SOUND_EVENT.containsId(new Identifier(s))),
         };
+    }
+
+    private boolean isValidPattern(String s) {
+        try {
+            Pattern.compile(s);
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
     }
 }

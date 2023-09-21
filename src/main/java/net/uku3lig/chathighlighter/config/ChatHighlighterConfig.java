@@ -2,23 +2,22 @@ package net.uku3lig.chathighlighter.config;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.network.ClientPlayerEntity;
-import net.uku3lig.ukulib.config.IConfig;
 
-import java.util.*;
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Optional;
 import java.util.regex.Pattern;
 
 @AllArgsConstructor
-@NoArgsConstructor
 @Getter
 @Setter
-public class ChatHighlighterConfig implements IConfig<ChatHighlighterConfig> {
-    private List<String> text = new ArrayList<>();
-    private int color = 0xFFFF00;
-    private byte alpha = (byte) 0x7F;
+public class ChatHighlighterConfig implements Serializable {
+    private List<String> text;
+    private int color = 0x7FFFFF00;
     private boolean usePattern = false;
     private boolean playSound = true;
     private String sound = "block.note_block.bell";
@@ -48,9 +47,8 @@ public class ChatHighlighterConfig implements IConfig<ChatHighlighterConfig> {
         this.text.add(text);
     }
 
-    @Override
-    public ChatHighlighterConfig defaultConfig() {
-        ClientPlayerEntity player = MinecraftClient.getInstance().player;
-        return new ChatHighlighterConfig(player != null ? player.getEntityName() : "uku3lig");
+    @SuppressWarnings("unused")
+    public ChatHighlighterConfig() {
+        this(MinecraftClient.getInstance().player != null ? MinecraftClient.getInstance().player.getEntityName() : "uku3lig");
     }
 }
