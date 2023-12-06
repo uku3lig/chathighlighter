@@ -1,30 +1,15 @@
 plugins {
-    id 'fabric-loom' version '1.3-SNAPSHOT'
-    id 'io.github.juuxel.loom-vineflower' version '1.11.0'
-    id 'io.freefair.lombok' version '8.3'
+    id 'fabric-loom' version '1.4-SNAPSHOT'
+    id 'io.freefair.lombok' version '8.4'
 }
 
 version = "${project.mod_version}+mc${project.minecraft_version}"
 group = project.maven_group
 
 repositories {
-    // Add repositories to retrieve artifacts from in here.
-    // You should only use this when depending on other mods because
-    // Loom adds the essential maven repositories to download Minecraft and libraries from automatically.
-    // See https://docs.gradle.org/current/userguide/declaring_repositories.html
-    // for more information about repositories.
     maven {
         name "uku's repo"
         url "https://maven.uku3lig.net/releases"
-    }
-    maven {
-        url "https://maven.uku3lig.net/snapshots"
-    }
-
-    // See https://docs.modrinth.com/docs/tutorials/maven/
-    maven {
-        name "Modrinth"
-        url "https://api.modrinth.com/maven"
     }
 }
 
@@ -36,9 +21,6 @@ dependencies {
 
     // ukulib, very cool library
     modApi "net.uku3lig:ukulib:${project.ukulib_version}"
-
-    // Modrinth mods can be added as dependencies via their repository
-    modRuntimeOnly "maven.modrinth:lazydfu:0.1.3"
 }
 
 processResources {

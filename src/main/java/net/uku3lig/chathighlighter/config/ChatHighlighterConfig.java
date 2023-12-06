@@ -49,6 +49,6 @@ public class ChatHighlighterConfig implements Serializable {
 
     @SuppressWarnings("unused")
     public ChatHighlighterConfig() {
-        this(MinecraftClient.getInstance().player != null ? MinecraftClient.getInstance().player.getEntityName() : "uku3lig");
+        this(MinecraftClient.getInstance().player != null ? MinecraftClient.getInstance().player.getNameForScoreboard() : "uku3lig");
     }
 }
