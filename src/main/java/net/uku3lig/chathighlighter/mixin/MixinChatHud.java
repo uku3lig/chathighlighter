@@ -23,13 +23,19 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
+import java.util.HashSet;
 import java.util.Locale;
 import java.util.Optional;
+import java.util.Set;
 import java.util.regex.Matcher;
 
 @Mixin(ChatHud.class)
 @Slf4j
 public abstract class MixinChatHud {
+    // fucky fix for chat patches compat, don't like it, but it is how it is
+    @Unique
+    private static final Set<Integer> pingedTicks = new HashSet<>();
+
     @Shadow
     protected abstract int getLineHeight();
 
@@ -75,16 +81,18 @@ public abstract class MixinChatHud {
 
         if (config.isUsePattern() && config.getPattern().isPresent()) {
             Matcher matcher = config.getPattern().get().matcher(str);
-            if (matcher.find()) playSound(config);
+            if (matcher.find()) playSound(config, ticks);
         } else if (config.getText().stream().map(String::toLowerCase).anyMatch(str::contains)) {
-            playSound(config);
+            playSound(config, ticks);
         }
     }
 
     @Unique
-    private void playSound(ChatHighlighterConfig config) {
+    private void playSound(ChatHighlighterConfig config, int ticks) {
         ClientPlayerEntity player = MinecraftClient.getInstance().player;
-        if (player == null) return;
+        if (player == null || pingedTicks.contains(ticks)) return;
+
+        pingedTicks.add(ticks);
 
         Optional.ofNullable(config.getSound())
                 .map(Identifier::new)
