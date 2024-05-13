@@ -24,7 +24,7 @@ public class ChatHighlighterConfig implements Serializable {
 
     public Optional<Pattern> getPattern() {
         if (text.isEmpty()) return Optional.empty();
-        String first = text.get(0);
+        String first = text.getFirst();
         if (first.isEmpty() || first.isBlank()) return Optional.empty();
 
         try {
