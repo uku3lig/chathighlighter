@@ -32,7 +32,7 @@ public class ChatHighlightConfigScreen extends AbstractConfigScreen<ChatHighligh
                         SimpleOption.constantTooltip(Text.translatable("chathighlighter.option.regex.tooltip"))),
                 CyclingOption.ofBoolean("chathighlighter.option.play_sound", config.isPlaySound(), config::setPlaySound),
                 new InputOption("chathighlighter.option.sound", config.getSound(), config::setSound,
-                        s -> Registries.SOUND_EVENT.containsId(new Identifier(s))),
+                        s -> Registries.SOUND_EVENT.containsId(Identifier.tryParse(s))),
         };
     }
 

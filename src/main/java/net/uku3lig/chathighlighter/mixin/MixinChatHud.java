@@ -88,7 +88,7 @@ public abstract class MixinChatHud {
         pingedTicks.add(ticks);
 
         Optional.ofNullable(config.getSound())
-                .map(Identifier::new)
+                .map(Identifier::tryParse)
                 .map(Registries.SOUND_EVENT::get)
                 .ifPresent(e -> player.playSound(e, 1, 1));
     }
