@@ -1,10 +1,10 @@
 package net.uku3lig.chathighlighter.config;
 
-import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.option.SimpleOption;
-import net.minecraft.registry.Registries;
-import net.minecraft.text.Text;
-import net.minecraft.util.Identifier;
+import net.minecraft.client.OptionInstance;
+import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.network.chat.Component;
+import net.minecraft.resources.Identifier;
 import net.uku3lig.chathighlighter.ChatHighlighter;
 import net.uku3lig.ukulib.config.option.ColorOption;
 import net.uku3lig.ukulib.config.option.CyclingOption;
@@ -29,10 +29,10 @@ public class ChatHighlightConfigScreen extends AbstractConfigScreen<ChatHighligh
                 }, s -> !s.isBlank() && (!config.isUsePattern() || isValidPattern(s))),
                 new ColorOption("chathighlighter.option.color", config.getColor(), config::setColor, true),
                 CyclingOption.ofBoolean("chathighlighter.option.regex", config.isUsePattern(), config::setUsePattern,
-                        SimpleOption.constantTooltip(Text.translatable("chathighlighter.option.regex.tooltip"))),
+                        OptionInstance.cachedConstantTooltip(Component.translatable("chathighlighter.option.regex.tooltip"))),
                 CyclingOption.ofBoolean("chathighlighter.option.play_sound", config.isPlaySound(), config::setPlaySound),
                 new InputOption("chathighlighter.option.sound", config.getSound(), config::setSound,
-                        s -> Registries.SOUND_EVENT.containsId(Identifier.tryParse(s))),
+                        s -> BuiltInRegistries.SOUND_EVENT.containsKey(Identifier.parse(s))),
         };
     }
 

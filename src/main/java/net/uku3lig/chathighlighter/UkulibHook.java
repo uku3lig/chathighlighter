@@ -1,6 +1,6 @@
 package net.uku3lig.chathighlighter;
 
-import net.minecraft.client.gui.screen.Screen;
+import net.minecraft.client.gui.screens.Screen;
 import net.uku3lig.chathighlighter.config.ChatHighlightConfigScreen;
 import net.uku3lig.ukulib.api.UkulibAPI;
 

@@ -3,8 +3,7 @@ package net.uku3lig.chathighlighter.config;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
-import net.minecraft.client.MinecraftClient;
-
+import net.minecraft.client.Minecraft;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -49,6 +48,6 @@ public class ChatHighlighterConfig implements Serializable {
 
     @SuppressWarnings("unused")
     public ChatHighlighterConfig() {
-        this(MinecraftClient.getInstance().player != null ? MinecraftClient.getInstance().player.getNameForScoreboard() : "uku3lig");
+        this(Minecraft.getInstance().player != null ? Minecraft.getInstance().player.getScoreboardName() : "uku3lig");
     }
 }
