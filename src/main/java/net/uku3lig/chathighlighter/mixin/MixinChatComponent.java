@@ -3,10 +3,10 @@ package net.uku3lig.chathighlighter.mixin;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.llamalad7.mixinextras.sugar.Local;
-import net.minecraft.client.GuiMessage;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.components.ChatComponent;
+import net.minecraft.client.multiplayer.chat.GuiMessage;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.Identifier;
@@ -29,7 +29,7 @@ public abstract class MixinChatComponent {
     @Unique
     private static final Set<Integer> pingedTicks = new HashSet<>();
 
-    @WrapOperation(method = "method_75802", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/components/ChatComponent$ChatGraphicsAccess;fill(IIIII)V", ordinal = 0))
+    @WrapOperation(method = "lambda$extractRenderState$1", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/components/ChatComponent$ChatGraphicsAccess;fill(IIIII)V", ordinal = 0))
     private static void highlight(ChatComponent.ChatGraphicsAccess instance, int x1, int y1, int x2, int y2, int color, Operation<Void> original, @Local(argsOnly = true) GuiMessage.Line line, @Local(argsOnly = true, ordinal = 1) float opacity) {
         original.call(instance, x1, y1, x2, y2, color);
 
@@ -62,7 +62,7 @@ public abstract class MixinChatComponent {
         }
     }
 
-    @Inject(method = "addMessageToQueue(Lnet/minecraft/client/GuiMessage;)V", at = @At("HEAD"))
+    @Inject(method = "addMessageToQueue", at = @At("HEAD"))
     public void playSound(GuiMessage message, CallbackInfo ci) {
         final ChatHighlighterConfig config = ChatHighlighter.getManager().getConfig();
         final String str = message.content().getString().toLowerCase(Locale.ROOT);
