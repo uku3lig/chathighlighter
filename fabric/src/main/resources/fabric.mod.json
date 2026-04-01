@@ -8,12 +8,11 @@
     "uku"
   ],
   "contact": {
-    "website": "https://uku3lig.net",
     "repo": "https://github.com/uku3lig/chathighlighter"
   },
   "license": "mit",
   "icon": "assets/chathighlighter/icon.png",
-  "environment": "*",
+  "environment": "client",
   "entrypoints": {
     "ukulib": [
       "net.uku3lig.chathighlighter.UkulibHook"

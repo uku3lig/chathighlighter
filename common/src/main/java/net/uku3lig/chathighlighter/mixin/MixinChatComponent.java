@@ -25,10 +25,6 @@ import java.util.regex.Matcher;
 
 @Mixin(ChatComponent.class)
 public abstract class MixinChatComponent {
-    // fucky fix for chat patches compat, don't like it, but it is how it is
-    @Unique
-    private static final Set<Integer> pingedTicks = new HashSet<>();
-
     @WrapOperation(method = "lambda$extractRenderState$1", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/components/ChatComponent$ChatGraphicsAccess;fill(IIIII)V", ordinal = 0))
     private static void highlight(ChatComponent.ChatGraphicsAccess instance, int x1, int y1, int x2, int y2, int color, Operation<Void> original, @Local(argsOnly = true) GuiMessage.Line line, @Local(argsOnly = true, ordinal = 1) float opacity) {
         original.call(instance, x1, y1, x2, y2, color);
@@ -43,7 +39,7 @@ public abstract class MixinChatComponent {
             Matcher matcher = config.getPattern().get().matcher(str);
             while (matcher.find()) {
                 String before = str.substring(0, matcher.start());
-                int beforeWidth = font.width(before) + ChatHighlighter.getOffset();
+                int beforeWidth = font.width(before);
                 int width = font.width(matcher.group());
                 instance.fill(beforeWidth, y1, width + beforeWidth, y2, highlightColor);
             }
@@ -53,7 +49,7 @@ public abstract class MixinChatComponent {
                 int index = str.indexOf(keyword);
                 while (index >= 0) {
                     String before = str.substring(0, index);
-                    int beforeWidth = font.width(before) + ChatHighlighter.getOffset();
+                    int beforeWidth = font.width(before);
                     int width = font.width(keyword);
                     instance.fill(beforeWidth, y1, width + beforeWidth, y2, highlightColor);
                     index = str.indexOf(keyword, index + 1);
@@ -71,18 +67,16 @@ public abstract class MixinChatComponent {
 
         if (config.isUsePattern() && config.getPattern().isPresent()) {
             Matcher matcher = config.getPattern().get().matcher(str);
-            if (matcher.find()) playSound(config, message.addedTime());
+            if (matcher.find()) playSound(config);
         } else if (config.getText().stream().map(String::toLowerCase).anyMatch(str::contains)) {
-            playSound(config, message.addedTime());
+            playSound(config);
         }
     }
 
     @Unique
-    private void playSound(ChatHighlighterConfig config, int ticks) {
+    private void playSound(ChatHighlighterConfig config) {
         LocalPlayer player = Minecraft.getInstance().player;
-        if (player == null || pingedTicks.contains(ticks)) return;
-
-        pingedTicks.add(ticks);
+        if (player == null) return;
 
         Optional.ofNullable(config.getSound())
                 .map(Identifier::tryParse)

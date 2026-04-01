@@ -1,0 +1,36 @@
+modLoader = "javafml"
+loaderVersion = "[4,)"
+license = "MIT"
+
+[[mods]]
+modId = "chathighlighter"
+displayName = "ChatHighlighter"
+version = "${version}"
+
+logoFile = "assets/chathighlighter/icon.png"
+authors = "uku"
+description = "highlight things in chat"
+
+[[dependencies.chathighlighter]]
+modId = "minecraft"
+type = "required"
+versionRange = "[26.1,)"
+ordering = "NONE"
+side = "CLIENT"
+
+[[dependencies.chathighlighter]]
+modId = "neoforge"
+type = "required"
+versionRange = "[26.1.0.0,)"
+ordering = "NONE"
+side = "CLIENT"
+
+[[dependencies.chathighlighter]]
+modId = "ukulib"
+type = "required"
+versionRange = "[2.0.0,)"
+ordering = "NONE"
+side = "CLIENT"
+
+[[mixins]]
+config = "chathighlighter.mixins.json"
